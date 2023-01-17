@@ -45,13 +45,13 @@ const resolvers = {
     },
     saveBook: async (
       parent,
-      { userId, bookId, title, description },
+      { _id, bookId, title, description, authors, image },
       context
     ) => {
       // if (bookId) {
-      console.log(bookId);
+      console.log(_id);
       return User.findOneAndUpdate(
-        { _id: userId },
+        { _id: _id },
         {
           $push: {
             savedBooks: [
@@ -59,6 +59,8 @@ const resolvers = {
                 bookId: bookId,
                 title: title,
                 description: description,
+                authors: authors,
+                image: image,
               },
             ],
           },
