@@ -28,21 +28,21 @@ const resolvers = {
 
       return { token, user };
     },
-    login: async (parent, {email, password}) => {
-      const user = await User.findOne({email});
+    login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
       if (!user) {
-        throw new AuthenticationError("No profile with this email found!")
+        throw new AuthenticationError("No profile with this email found!");
       }
 
       const correctPw = await user.isCorrectPassword(password);
-      
+
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect password!');
+        throw new AuthenticationError("Incorrect password!");
       }
 
       const token = signToken(user);
       return { token, user };
-    }
+    },
     saveBook: async (parent, { user, body }, context) => {
       if (context.user) {
         return User.findOneAndUpdate(
@@ -53,16 +53,16 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-    removeBook: async (parent, {user, params}, context) => {
+    removeBook: async (parent, { user, params }, context) => {
       if (context.user) {
         return User.findOneAndUpdate(
-          {_id: user._id },
+          { _id: user._id },
           { $pull: { savedBooks: { bookId: params.bookId } } },
           { new: true }
         );
       }
       throw new AuthenticationError("You need to be logged in!");
-    }
+    },
   },
 };
 
